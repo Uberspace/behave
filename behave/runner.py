@@ -280,6 +280,19 @@ class Context(object):
                 return True
         return False
 
+    @property
+    def values(self):
+        vars = {}
+
+        for frame in reversed(self._stack):
+            for k, v in frame.iteritems():
+                try:
+                    vars[k] = str(v)
+                except UnicodeEncodeError:
+                    pass
+
+        return vars
+
     def execute_steps(self, steps_text):
         """The steps identified in the "steps" text string will be parsed and
         executed in turn just as though they were defined in a feature file.
